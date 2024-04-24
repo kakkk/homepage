@@ -140,6 +140,10 @@ const Block = styled.div`
 	}
 `;
 
+const Link = styled.a`
+    color: #bb7dd7;
+`
+
 const Line = ({children}) => <LineContainer>{children}</LineContainer>;
 
 const ActiveLine = ({children}) => <LineContainer>$ {children}<Blinker/></LineContainer>
@@ -159,8 +163,8 @@ const NeofetchOutput = () => {
           <li><Cyan>Position</Cyan>: Guangzhou</li>
           <li><Cyan>Role</Cyan>: Backend Engineer</li>
           <li><Cyan>Skills</Cyan>: Golang, MySQL, TypeScript, etc...</li>
-          <li><Cyan>Blog</Cyan>: https://blog.kakkk.net</li>
-          <li><Cyan>Github</Cyan>: https://github.com/kakkk</li>
+            <li><Cyan>Blog</Cyan>: <Link href="https://blog.kakkk.net" target="_blank" rel="noopener noreferrer">https://blog.kakkk.net</Link></li>
+          <li><Cyan>Github</Cyan>: <Link href="https://github.com/kakkk" target="_blank" rel="noopener noreferrer">https://github.com/kakkk</Link></li>
           <li><Cyan>Email</Cyan>: kakkk@live.com</li>
           <li>{colors.map(color => <ColorBlock color={color}/>)}</li>
         </NeofetchList>
@@ -199,7 +203,6 @@ const Terminal = () => {
       <TerminalFigure onClick={focusInput}>
         <Lines>
           {lines.map((line, index) => <Line key={index}>{line}</Line>)}
-          {/*{displayNeofetch && <Line><NeofetchOutput/></Line>}*/}
           <Line>
             <HiddenForm method="post" onSubmit={handleSubmit}>
               <input type="text" value={input} onChange={e => setInput(e.target.value.toLowerCase())}></input>
