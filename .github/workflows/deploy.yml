@@ -6,56 +6,57 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.11.0'
-        
-    - name: Install dependencies
-      run: yarn install
+      - name: Checkout Source Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Build
-      run: yarn build
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.11.0'
 
-    - name: Deploy to GitHub Pages Repository
-      uses: actions/checkout@v3
-      with:
-        repository: 'kakkk/kakkk.github.io'
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: 'kakkk.github.io'
-    
-    - name: Clear old files
-      run: |
-        cd kakkk.github.io
-        ls | grep -v 'README.md' | xargs rm -rf
-      
-    - name: Copy new build files
-      run: |
-        cp -a ../build/* kakkk.github.io/
-        
-    - name: Commit changes
-      run: |
-        cd kakkk.github.io
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-        git add .
-        git commit -m "Deploy updated site"
-        
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: kakkk.github.io
-        commit-message: "Update website"
-        title: "Update website"
-        body: "Automated PR to update website content"
-        branch: "update-website"
-        base: "master"
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build Project
+        run: yarn build
+
+      - name: Checkout Target Repository
+        uses: actions/checkout@v3
+        with:
+          repository: 'kakkk/kakkk.github.io'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: '${{ github.workspace }}/kakkk.github.io'
+
+      - name: Clear Old Files in Target Repository
+        run: |
+          cd '${{ github.workspace }}/kakkk.github.io'
+          ls | grep -v 'README.md' | xargs rm -rf
+
+      - name: Copy Build Files to Target Repository
+        run: |
+          cp -a '${{ github.workspace }}/build/.' '${{ github.workspace }}/kakkk.github.io/'
+
+      - name: Commit and Push Changes to Target Repository
+        run: |
+          cd '${{ github.workspace }}/kakkk.github.io'
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git add .
+          git commit -m "Deploy updated website content"
+          git push
+
+      - name: Create Pull Request in Target Repository
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: '${{ github.workspace }}/kakkk.github.io'
+          commit-message: "Update website content"
+          title: "Automated Website Update"
+          branch: update-${{ github.run_id }}
+          base: 'master' # 目标仓库的目标分支名
