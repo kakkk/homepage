@@ -159,8 +159,8 @@ const NeofetchOutput = () => {
         <NeofetchList>
           <li><Cyan>me</Cyan>@<Cyan>kakkk</Cyan></li>
           <li>-----------------</li>
-          <li><Cyan>RealName</Cyan>: ZHU YINGXIN (朱颖鑫)</li>
-          <li><Cyan>Position</Cyan>: Guangzhou</li>
+          <li><Cyan>RealName</Cyan>: Zhu Yingxin (朱颖鑫)</li>
+          <li><Cyan>Position</Cyan>: Guangzhou, China</li>
           <li><Cyan>Role</Cyan>: Backend Engineer</li>
           <li><Cyan>Skills</Cyan>: Golang, MySQL, TypeScript, etc...</li>
             <li><Cyan>Blog</Cyan>: <Link href="https://blog.kakkk.net" target="_blank" rel="noopener noreferrer">https://blog.kakkk.net</Link></li>
